@@ -25,6 +25,8 @@ def moveLeft(graph, boardSize):
         tempGraph.data[index_of_zero + 1] = 0
         return Node(tempGraph.data)
 
+    return None
+
 
 def canMoveRight(graph, boardSize):
     index_of_zero = graph.data.index(0)
@@ -39,6 +41,8 @@ def moveRight(graph, boardSize):
         tempGraph.data[index_of_zero] = tempGraph.data[index_of_zero - 1]
         tempGraph.data[index_of_zero - 1] = 0
         return Node(tempGraph.data)
+
+    return None
 
 
 def canMoveUp(graph, boardSize):
@@ -55,6 +59,8 @@ def moveUp(graph, boardSize):
         tempGraph.data[index_of_zero + boardSize] = 0
         return Node(tempGraph.data)
 
+    return None
+
 
 def canMoveDown(graph, boardSize):
     index_of_zero = graph.data.index(0)
@@ -69,6 +75,8 @@ def moveDown(graph, boardSize):
         tempGraph.data[index_of_zero] = tempGraph.data[index_of_zero - boardSize]
         tempGraph.data[index_of_zero - boardSize] = 0
         return Node(tempGraph.data)
+
+    return None
 
 
 def isValidInput(algoNum, boardSize, inputList):
