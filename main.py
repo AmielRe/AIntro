@@ -2,8 +2,13 @@ from Graph import *
 
 
 def main():
-    graph = inputToGraph(1, 4, [1, 2, 3, 4, 5, 6, 7, 8,
-                                9, 10, 11, 12, 13, 0, 14, 15])
+
+    with open('input.txt', 'r') as file:
+        lines = file.readlines()
+        algoNum = int(lines[0].rstrip('\n'))
+        boardSize = int(lines[1].rstrip('\n'))
+        inputBoard = [int(x) for x in lines[2].split("-")]
+    graph = inputToGraph(algoNum, boardSize, inputBoard)
 
     # Check graph is created and format is valid
     if (graph == None):
@@ -15,11 +20,15 @@ def main():
 
     # RUN BFS
 
+    # Output BFS result
+
     print("---------------------------------------------")
 
     print("-------------------- DFS --------------------")
 
     # RUN DFS
+
+    # Output DFS result
 
     print("---------------------------------------------")
 
@@ -27,11 +36,15 @@ def main():
 
     # RUN A*
 
+    # Output A* result
+
     print("---------------------------------------------")
 
     print("-------------------- Last algo --------------------")
 
     # RUN last algo (Tal's algo)
+
+    # Output Last algo result
 
     print("---------------------------------------------")
 
