@@ -1,19 +1,17 @@
-from Graph import *
-
+from Components.Board import Board
+from Components.Graph import Graph
+from Util.file import File, MoveTypes
 
 def main():
-
-    with open('input.txt', 'r') as file:
-        lines = file.readlines()
-        algoNum = int(lines[0].rstrip('\n'))
-        boardSize = int(lines[1].rstrip('\n'))
-        inputBoard = [int(x) for x in lines[2].split("-")]
-    graph = inputToGraph(algoNum, boardSize, inputBoard)
+    algorithm, length, board_values = File.read_input(r'Files/input.txt')
 
     # Check graph is created and format is valid
-    if (graph == None):
+    if not File.isValidInput(algorithm, length, board_values):
         print("Invalid input, please check format!")
         return
+
+    board = Board(length, board_values)
+    graph = Graph(board)
 
     # If we got here, input is good and initial state is in 'graph'
     print("-------------------- BFS --------------------")
@@ -40,13 +38,15 @@ def main():
 
     print("---------------------------------------------")
 
-    print("-------------------- Last algo --------------------")
+    print("-------------------- IDS --------------------")
 
-    # RUN last algo (Tal's algo)
+    # RUN IDS
 
-    # Output Last algo result
+    # Output IDS result
 
     print("---------------------------------------------")
+    moves: list[MoveTypes] = []
+    File.write_output(moves=moves)
 
 
 if __name__ == "__main__":
