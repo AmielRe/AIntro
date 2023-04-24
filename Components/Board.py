@@ -1,7 +1,8 @@
 class Board:
     def __init__(self, length, values):
         self.length = length
-        self.values = [[values[i * self.length + j] for j in range(self.length)] for i in range(self.length)]
+        self.values = [[values[i * self.length + j]
+                        for j in range(self.length)] for i in range(self.length)]
 
     def __str__(self):
         s = ""
@@ -39,22 +40,26 @@ class Board:
         return self.values[row][col - 1] == 0 if self.have_item_left(col) else False
 
     def can_move_right(self, row, col):
-        return self.values[row][col + 1] == 0 if self.have_item_left(col) else False
+        return self.values[row][col + 1] == 0 if self.have_item_right(col) else False
 
     def can_move_up(self, row, col):
-        return self.values[row - 1][col] == 0 if self.have_item_left(row) else False
+        return self.values[row - 1][col] == 0 if self.have_item_up(row) else False
 
     def can_move_down(self, row, col):
-        return self.values[row + 1][col] == 0 if self.have_item_left(row) else False
+        return self.values[row + 1][col] == 0 if self.have_item_down(row) else False
 
     def move_left(self, row, col):
-        self.values[row][col], self.values[row][col - 1] = self.values[row][col - 1], self.values[row][col]
+        self.values[row][col], self.values[row][col -
+                                                1] = self.values[row][col - 1], self.values[row][col]
 
     def move_right(self, row, col):
-        self.values[row][col], self.values[row][col + 1] = self.values[row][col + 1], self.values[row][col]
+        self.values[row][col], self.values[row][col +
+                                                1] = self.values[row][col + 1], self.values[row][col]
 
     def move_up(self, row, col):
-        self.values[row][col], self.values[row - 1][col] = self.values[row - 1][col], self.values[row][col]
+        self.values[row][col], self.values[row -
+                                           1][col] = self.values[row - 1][col], self.values[row][col]
 
     def move_down(self, row, col):
-        self.values[row][col], self.values[row + 1][col] = self.values[row + 1][col], self.values[row][col]
+        self.values[row][col], self.values[row +
+                                           1][col] = self.values[row + 1][col], self.values[row][col]
