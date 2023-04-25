@@ -1,7 +1,7 @@
 from Components.Board import Board
 from Components.Graph import Graph
 from Util.file import File, MoveTypes
-
+from Algorithems.AStar import a_star
 def main():
     algorithm, length, board_values = File.read_input(r'Files/input.txt')
 
@@ -32,9 +32,7 @@ def main():
 
     print("-------------------- A* --------------------")
 
-    # RUN A*
-
-    # Output A* result
+    moves: list[MoveTypes] = a_star(board_start=board)
 
     print("---------------------------------------------")
 
@@ -45,7 +43,7 @@ def main():
     # Output IDS result
 
     print("---------------------------------------------")
-    moves: list[MoveTypes] = []
+
     File.write_output(moves=moves)
 
 
