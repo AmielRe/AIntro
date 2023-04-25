@@ -13,7 +13,7 @@ class File:
 
     @staticmethod
     def write_output(moves: list[MoveTypes]):
-        with open('Files/output.txt', 'w') as f:
+        with open(r'Files/output.txt', 'w') as f:
             for move in moves:
                 f.write(move.value)
 
