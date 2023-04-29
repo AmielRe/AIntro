@@ -1,5 +1,6 @@
 import itertools
 
+
 class Board:
     def __init__(self, length, values):
         self._length = length
