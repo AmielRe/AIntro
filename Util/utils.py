@@ -15,5 +15,13 @@ class MoveTypes(Enum):
     UP = 'U'
     DOWN = 'D'
 
+
 def manhattan_distance(p1, p2):
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+
+def getAlgorithmFromInt(algoNum):
+    try:
+        return SearchAlgorithms(algoNum)
+    except ValueError:
+        return None
