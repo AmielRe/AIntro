@@ -15,10 +15,14 @@ class File:
     @staticmethod
     def write_output(moves: list[MoveTypes], algorithm: SearchAlgorithms):
         with open(r'Files/output.txt', 'w') as f:
-            f.write(f'-------------------- {algorithm} --------------------')
-            for move in moves:
-                f.write(move.value)
-            f.write('---------------------------------------------')
+            f.write(f'-------------------- {algorithm} --------------------\n')
+            if (moves is None):
+                f.write("No solution found!")
+            else:
+                for move in moves:
+                    f.write(move.value)
+            f.write(
+                '\n--------------------------------------------------------------n')
 
     @staticmethod
     def isValidInput(algorithm_type: int,
