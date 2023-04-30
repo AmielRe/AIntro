@@ -1,3 +1,6 @@
+import itertools
+
+
 class Board:
     def __init__(self, length, values):
         self.length = length
@@ -11,6 +14,16 @@ class Board:
                 s += str(self.values[i][j]) + "\t"
             s += "\n"
         return s
+
+    def get_board_state(self):
+        return list(itertools.chain(*self.values))
+
+    def get_goal_state(self):
+        sorted_list = sorted(self.get_board_state())
+        first_item = sorted_list.pop(0)
+        sorted_list.append(first_item)
+
+        return sorted_list
 
     def length(self):
         return self.length
