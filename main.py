@@ -1,6 +1,7 @@
 from Components.Board import Board
 from Components.Graph import Graph
 from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
+from Algorithms.DFS import DFS
 
 
 def main():
@@ -22,8 +23,7 @@ def main():
         # RUN BFS
 
     elif (algorithm == SearchAlgorithms.DFS):
-        pass
-        # RUN DFS
+        moves = DFS(board, 20)
 
     elif (algorithm == SearchAlgorithms.A_STAR):
         pass
