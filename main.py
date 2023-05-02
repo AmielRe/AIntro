@@ -1,7 +1,7 @@
 from Components.Board import Board
 from Components.Graph import Graph
 from Util.file import File, MoveTypes
-from Algorithems.AStar import a_star
+from Algorithms.AStar import a_star
 def main():
     algorithm, length, board_values = File.read_input(r'Files/input.txt')
 
@@ -11,6 +11,27 @@ def main():
         return
 
     board = Board(length, board_values)
+
+    moves = a_star(board)
+    print(moves)
+    print(board)
+
+    for move in moves:
+        empty_item_pos = board.get_board_state().index(0)
+        empty_row = empty_item_pos // board.length()
+        empty_col = empty_item_pos % len(board[empty_row])
+
+        if move == MoveTypes.LEFT:
+            board.move_left(empty_row, empty_col + 1)
+        elif move == MoveTypes.RIGHT:
+            board.move_right(empty_row, empty_col - 1)
+        elif move == MoveTypes.DOWN:
+            board.move_down(empty_row - 1, empty_col)
+        else:
+            board.move_up(empty_row + 1, empty_col)
+
+        print(board)
+
     graph = Graph(board)
 
     # If we got here, input is good and initial state is in 'graph'
