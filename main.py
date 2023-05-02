@@ -1,21 +1,42 @@
 from Components.Board import Board
 from Components.Graph import Graph
-from Util.file import File, MoveTypes
+from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
 from Algorithms.AStar import a_star
+
+
 def main():
-    algorithm, length, board_values = File.read_input(r'Files/input.txt')
+    algorithm_num, length, board_values = File.read_input(r'Files/input.txt')
 
     # Check graph is created and format is valid
-    if not File.isValidInput(algorithm, length, board_values):
+    if not File.isValidInput(algorithm_num, length, board_values):
         print("Invalid input, please check format!")
         return
 
+    algorithm = getAlgorithmFromInt(algorithm_num)
     board = Board(length, board_values)
+    graph = Graph(board)
+    moves: list[MoveTypes] = []
 
-    moves = a_star(board)
-    print(moves)
+    # If we got here, input is good and initial state is in 'graph'
+    if algorithm == SearchAlgorithms.BFS:
+        pass
+        # RUN BFS
+
+    elif algorithm == SearchAlgorithms.DFS:
+        pass
+        # RUN DFS
+
+    elif algorithm == SearchAlgorithms.A_STAR:
+        moves = a_star(board)
+
+    elif algorithm == SearchAlgorithms.IDS:
+        pass
+        # RUN IDS
+
+    elif algorithm == SearchAlgorithms.IDA_STAR:
+        print("IDA* algorithm isn't supported currently, please try a different algorithm!")
+
     print(board)
-
     for move in moves:
         empty_item_pos = board.get_board_state().index(0)
         empty_row = empty_item_pos // board.length()
@@ -29,43 +50,9 @@ def main():
             board.move_down(empty_row - 1, empty_col)
         else:
             board.move_up(empty_row + 1, empty_col)
-
         print(board)
 
-    graph = Graph(board)
-
-    # If we got here, input is good and initial state is in 'graph'
-    print("-------------------- BFS --------------------")
-
-    # RUN BFS
-
-    # Output BFS result
-
-    print("---------------------------------------------")
-
-    print("-------------------- DFS --------------------")
-
-    # RUN DFS
-
-    # Output DFS result
-
-    print("---------------------------------------------")
-
-    print("-------------------- A* --------------------")
-
-    moves: list[MoveTypes] = a_star(board_start=board)
-
-    print("---------------------------------------------")
-
-    print("-------------------- IDS --------------------")
-
-    # RUN IDS
-
-    # Output IDS result
-
-    print("---------------------------------------------")
-
-    File.write_output(moves=moves)
+    File.write_output(moves=moves, algorithm=algorithm)
 
 
 if __name__ == "__main__":
