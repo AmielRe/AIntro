@@ -38,33 +38,31 @@ class HeapItem:
 
 def get_new_boards(board: Board):
     possible_moves = []
-    empty_item_pos = board.get_board_state().index(0)
-    empty_row = empty_item_pos // board.length()
-    empty_col = empty_item_pos % len(board[empty_row])
+    empty_row, empty_col = board.find_zero_index()
 
-    if empty_row + 1 < board.length() and board.can_move_up(empty_row + 1, empty_col):  # move empty item up
+    if board.can_move_up(empty_row + 1, empty_col):  # move empty item up
         new_board = Board(board.length(), board.get_board_state())
         new_board.move_up(empty_row + 1, empty_col)
         possible_moves.append((new_board, MoveTypes.UP))
 
-    if empty_row > 0 and board.can_move_down(empty_row - 1, empty_col):  # move empty item down
+    if board.can_move_down(empty_row - 1, empty_col):  # move empty item down
         new_board = Board(board.length(), board.get_board_state())
         new_board.move_down(empty_row - 1, empty_col)
         possible_moves.append((new_board, MoveTypes.DOWN))
 
-    if empty_col + 1 < len(board[empty_row]) and board.can_move_left(empty_row, empty_col + 1):  # move empty item left
+    if board.can_move_left(empty_row, empty_col + 1):  # move empty item left
         new_board = Board(board.length(), board.get_board_state())
         new_board.move_left(empty_row, empty_col + 1)
         possible_moves.append((new_board, MoveTypes.LEFT))
 
-    if empty_col > 0 and board.can_move_right(empty_row, empty_col - 1):  # move empty item right
+    if board.can_move_right(empty_row, empty_col - 1):  # move empty item right
         new_board = Board(board.length(), board.get_board_state())
         new_board.move_right(empty_row, empty_col - 1)
         possible_moves.append((new_board, MoveTypes.RIGHT))
 
     return possible_moves
 
-def a_star(board_start: Board):
+def AStar(board_start: Board):
     goal: list[int] = board_start.get_goal_state()
     heap = [HeapItem(0, board_start, [])]
     visited = set()
