@@ -15,8 +15,14 @@ class Board:
             s += "\n"
         return s
 
+    def find_zero_index(self):
+        empty_item_pos = self.get_board_state().index(0)
+        row = empty_item_pos // self.length()
+        col = empty_item_pos % len(self[row])
+        return row, col
+
     def get_board_state(self):
-        return list(itertools.chain(*self.values))
+        return list(itertools.chain(*self._values))
 
     def get_goal_state(self):
         sorted_list = sorted(self.get_board_state())
@@ -50,16 +56,16 @@ class Board:
         return row != self._length - 1
 
     def can_move_left(self, row, col):
-        return self._values[row][col - 1] == 0 if self.have_item_left(col) else False
+        return self._values[row][col - 1] == 0 if self.have_item_left(col) and col < self.length() else False
 
     def can_move_right(self, row, col):
-        return self._values[row][col + 1] == 0 if self.have_item_right(col) else False
+        return self._values[row][col + 1] == 0 if self.have_item_right(col) and col >= 0 else False
 
     def can_move_up(self, row, col):
-        return self._values[row - 1][col] == 0 if self.have_item_up(row) else False
+        return self._values[row - 1][col] == 0 if self.have_item_up(row) and row < self.length() else False
 
     def can_move_down(self, row, col):
-        return self._values[row + 1][col] == 0 if self.have_item_down(row) else False
+        return self._values[row + 1][col] == 0 if self.have_item_down(row) and row >= 0 else False
 
     def move_left(self, row, col):
         self._values[row][col], self._values[row][col -
