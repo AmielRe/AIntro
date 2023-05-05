@@ -1,52 +1,42 @@
 from Components.Board import Board
 from Components.Graph import Graph
-from Util.file import File, MoveTypes
+from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
+from Algorithms.DFS import DFS
+
 
 def main():
-    algorithm, length, board_values = File.read_input(r'Files/input.txt')
+    algorithm_num, length, board_values = File.read_input(r'Files/input.txt')
 
     # Check graph is created and format is valid
-    if not File.isValidInput(algorithm, length, board_values):
+    if not File.isValidInput(algorithm_num, length, board_values):
         print("Invalid input, please check format!")
         return
 
+    algorithm = getAlgorithmFromInt(algorithm_num)
     board = Board(length, board_values)
     graph = Graph(board)
+    moves: list[MoveTypes] = []
 
     # If we got here, input is good and initial state is in 'graph'
-    print("-------------------- BFS --------------------")
+    if (algorithm == SearchAlgorithms.BFS):
+        pass
+        # RUN BFS
 
-    # RUN BFS
+    elif (algorithm == SearchAlgorithms.DFS):
+        moves = DFS(board, 20)
 
-    # Output BFS result
+    elif (algorithm == SearchAlgorithms.A_STAR):
+        pass
+        # RUN A*
 
-    print("---------------------------------------------")
+    elif (algorithm == SearchAlgorithms.IDS):
+        pass
+        # RUN IDS
 
-    print("-------------------- DFS --------------------")
+    elif (algorithm == SearchAlgorithms.IDA_STAR):
+        print("IDA* algorithm isn't supported currently, please try a different algorithm!")
 
-    # RUN DFS
-
-    # Output DFS result
-
-    print("---------------------------------------------")
-
-    print("-------------------- A* --------------------")
-
-    # RUN A*
-
-    # Output A* result
-
-    print("---------------------------------------------")
-
-    print("-------------------- IDS --------------------")
-
-    # RUN IDS
-
-    # Output IDS result
-
-    print("---------------------------------------------")
-    moves: list[MoveTypes] = []
-    File.write_output(moves=moves)
+    File.write_output(moves=moves, algorithm=algorithm)
 
 
 if __name__ == "__main__":

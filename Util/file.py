@@ -1,5 +1,6 @@
 import math
-from Util.utils import MoveTypes, SearchAlgorithms
+from Util.utils import MoveTypes, SearchAlgorithms, getAlgorithmFromInt
+
 
 class File:
     @staticmethod
@@ -12,10 +13,16 @@ class File:
         return algorithm_type, length, board_values
 
     @staticmethod
-    def write_output(moves: list[MoveTypes]):
-        with open('output.txt', 'w') as f:
-            for move in moves:
-                f.write(move.value)
+    def write_output(moves: list[MoveTypes], algorithm: SearchAlgorithms):
+        with open(r'Files/output.txt', 'w') as f:
+            f.write(f'-------------------- {algorithm} --------------------\n')
+            if (moves is None):
+                f.write("No solution found!")
+            else:
+                for move in moves:
+                    f.write(move.value)
+            f.write(
+                '\n--------------------------------------------------------------n')
 
     @staticmethod
     def isValidInput(algorithm_type: int,
@@ -23,11 +30,8 @@ class File:
                      board_values: list[int]):
         matching_algorithm = None
 
-        try:
-            matching_algorithm = SearchAlgorithms(algorithm_type)
-        except ValueError:
-            pass
+        matching_algorithm = getAlgorithmFromInt(algorithm_type)
 
-        return not((matching_algorithm is None) or
-                   (length <= 0) or
-                   (math.sqrt(len(board_values)) != length))
+        return not ((matching_algorithm is None) or
+                    (length <= 0) or
+                    (math.sqrt(len(board_values)) != length))
