@@ -2,6 +2,7 @@ from Components.Board import Board
 from Components.Graph import Graph
 from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
 from Algorithms.DFS import DFS
+from Algorithms.Ids import Ids
 
 
 def main():
@@ -30,8 +31,7 @@ def main():
         # RUN A*
 
     elif (algorithm == SearchAlgorithms.IDS):
-        pass
-        # RUN IDS
+        Ids(board, 20)
 
     elif (algorithm == SearchAlgorithms.IDA_STAR):
         print("IDA* algorithm isn't supported currently, please try a different algorithm!")
