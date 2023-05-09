@@ -45,33 +45,6 @@ class HeapItem:
         return self.priority < other.priority
 
 
-def get_new_boards(board: Board):
-    possible_moves = []
-    empty_row, empty_col = board.find_zero_index()
-
-    if board.can_move_up(empty_row + 1, empty_col):  # move empty item up
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_up(empty_row + 1, empty_col)
-        possible_moves.append((new_board, MoveTypes.UP))
-
-    if board.can_move_down(empty_row - 1, empty_col):  # move empty item down
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_down(empty_row - 1, empty_col)
-        possible_moves.append((new_board, MoveTypes.DOWN))
-
-    if board.can_move_left(empty_row, empty_col + 1):  # move empty item left
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_left(empty_row, empty_col + 1)
-        possible_moves.append((new_board, MoveTypes.LEFT))
-
-    if board.can_move_right(empty_row, empty_col - 1):  # move empty item right
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_right(empty_row, empty_col - 1)
-        possible_moves.append((new_board, MoveTypes.RIGHT))
-
-    return possible_moves
-
-
 def AStar(board_start: Board, layer = None):
     goal: list[int] = board_start.get_goal_state()
     heap = [HeapItem(0, board_start, [])]
@@ -88,7 +61,7 @@ def AStar(board_start: Board, layer = None):
             return moves
 
         visited.add(tuple(current_board.get_board_state()))
-        for new_board, move in get_new_boards(current_board):
+        for new_board, move in current_board.get_new_boards():
             # Calculate the priory according to Manhattan_distance
             priority = cost + 1
             for i, item in enumerate(new_board.get_board_state()):

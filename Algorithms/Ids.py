@@ -1,38 +1,7 @@
 import string
-
 from Components.Board import Board
 from collections import deque
-
 from Util.utils import MoveTypes
-
-
-def get_new_boards(board: Board):
-    possible_moves = []
-    empty_item_pos = board.get_board_state().index(0)
-    empty_row = empty_item_pos // board.width()
-    empty_col = empty_item_pos % len(board[empty_row])
-
-    if board.can_move_right(empty_row, empty_col - 1):  # move empty item right
-        new_board = Board(board.width(), board.get_board_state())
-        new_board.move_right(empty_row, empty_col - 1)
-        possible_moves.append((new_board, MoveTypes.RIGHT))
-
-    if empty_col + 1 < len(board[empty_row]) and board.can_move_left(empty_row, empty_col + 1):  # move empty item left
-        new_board = Board(board.width(), board.get_board_state())
-        new_board.move_left(empty_row, empty_col + 1)
-        possible_moves.append((new_board, MoveTypes.LEFT))
-
-    if board.can_move_down(empty_row - 1, empty_col):  # move empty item down
-        new_board = Board(board.width(), board.get_board_state())
-        new_board.move_down(empty_row - 1, empty_col)
-        possible_moves.append((new_board, MoveTypes.DOWN))
-
-    if empty_row + 1 < board.width() and board.can_move_up(empty_row + 1, empty_col):  # move empty item up
-        new_board = Board(board.width(), board.get_board_state())
-        new_board.move_up(empty_row + 1, empty_col)
-        possible_moves.append((new_board, MoveTypes.UP))
-
-    return possible_moves
 
 
 def Ids(board: Board, max_depth):
@@ -66,7 +35,8 @@ def run_dfs_in_layer(stack: deque, visited, goal: list[int], layer: int, array: 
 
         visited.add(node.__str__())
 
-        new_boards = get_new_boards(node)
+        # Get all available movements and reverse the order
+        new_boards = node.get_new_boards()[::-1]
 
         moves = []
 
