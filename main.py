@@ -1,8 +1,8 @@
 from Components.Board import Board
 from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
-from Algorithms.DFS import DFS
 from Algorithms.AStar import AStar
 from Algorithms.Ids import Ids
+from Algorithms.IDA import IDA
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
         # RUN BFS
 
     elif algorithm == SearchAlgorithms.DFS:
-        moves = DFS(board, 20)
+        print("DFS algorithm isn't supported currently, please try a different algorithm!")
 
     elif algorithm == SearchAlgorithms.A_STAR:
         moves = AStar(board)
@@ -32,7 +32,7 @@ def main():
         Ids(board, 20)
 
     elif algorithm == SearchAlgorithms.IDA_STAR:
-        print("IDA* algorithm isn't supported currently, please try a different algorithm!")
+        moves = IDA(board)
 
     File.write_output(moves=moves)
 
