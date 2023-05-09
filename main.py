@@ -1,7 +1,7 @@
 from Components.Board import Board
-from Components.Graph import Graph
 from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
 from Algorithms.DFS import DFS
+from Algorithms.AStar import AStar
 from Algorithms.Ids import Ids
 
 
@@ -15,28 +15,27 @@ def main():
 
     algorithm = getAlgorithmFromInt(algorithm_num)
     board = Board(length, board_values)
-    graph = Graph(board)
     moves: list[MoveTypes] = []
 
     # If we got here, input is good and initial state is in 'graph'
-    if (algorithm == SearchAlgorithms.BFS):
+    if algorithm == SearchAlgorithms.BFS:
         pass
         # RUN BFS
 
-    elif (algorithm == SearchAlgorithms.DFS):
+    elif algorithm == SearchAlgorithms.DFS:
         moves = DFS(board, 20)
 
-    elif (algorithm == SearchAlgorithms.A_STAR):
-        pass
-        # RUN A*
+    elif algorithm == SearchAlgorithms.A_STAR:
+        moves = AStar(board)
 
-    elif (algorithm == SearchAlgorithms.IDS):
+
+    elif algorithm == SearchAlgorithms.IDS:
         Ids(board, 20)
 
-    elif (algorithm == SearchAlgorithms.IDA_STAR):
+    elif algorithm == SearchAlgorithms.IDA_STAR:
         print("IDA* algorithm isn't supported currently, please try a different algorithm!")
 
-    File.write_output(moves=moves, algorithm=algorithm)
+    File.write_output(moves=moves)
 
 
 if __name__ == "__main__":

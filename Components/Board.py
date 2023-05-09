@@ -68,17 +68,13 @@ class Board:
         return self._values[row + 1][col] == 0 if self.have_item_down(row) and row >= 0 else False
 
     def move_left(self, row, col):
-        self._values[row][col], self._values[row][col -
-                                                  1] = self._values[row][col - 1], self._values[row][col]
+        self._values[row][col], self._values[row][col - 1] = self._values[row][col - 1], self._values[row][col]
 
     def move_right(self, row, col):
-        self._values[row][col], self._values[row][col +
-                                                  1] = self._values[row][col + 1], self._values[row][col]
+        self._values[row][col], self._values[row][col + 1] = self._values[row][col + 1], self._values[row][col]
 
     def move_up(self, row, col):
-        self._values[row][col], self._values[row -
-                                             1][col] = self._values[row - 1][col], self._values[row][col]
+        self._values[row][col], self._values[row - 1][col] = self._values[row - 1][col], self._values[row][col]
 
     def move_down(self, row, col):
-        self._values[row][col], self._values[row +
-                                             1][col] = self._values[row + 1][col], self._values[row][col]
+        self._values[row][col], self._values[row + 1][col] = self._values[row + 1][col], self._values[row][col]

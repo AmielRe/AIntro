@@ -59,7 +59,6 @@ class Graph:
                        vertex: Vertex,
                        row_index: int,
                        col_index: int):
-        print(f"row :{row_index}, col: {col_index}")
         if board.have_item_up(row_index):
             self.generate_neighbor(board=board,
                                    vertex=vertex,
