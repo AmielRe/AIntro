@@ -1,14 +1,7 @@
 from enum import Enum
 from heapq import heappush, heappop
 from Components.Board import Board
-from Util.utils import MoveTypes, manhattan_distance
-
-
-class MovePriority(Enum):
-    UP = 1
-    DOWN = 2
-    LEFT = 3
-    RIGHT = 4
+from Util.utils import MoveTypes, MovePriority, manhattan_distance
 
 
 class HeapItem:
@@ -79,7 +72,7 @@ def get_new_boards(board: Board):
     return possible_moves
 
 
-def AStar(board_start: Board):
+def AStar(board_start: Board, layer = None):
     goal: list[int] = board_start.get_goal_state()
     heap = [HeapItem(0, board_start, [])]
     visited = set()
@@ -89,6 +82,8 @@ def AStar(board_start: Board):
         current_board: Board = current_item.board
         priority: int = current_item.priority
         moves: list[MoveTypes] = current_item.moves
+        if(layer != None and layer < len(moves)):
+            return None
         if current_board.get_board_state() == goal:
             return moves
 
