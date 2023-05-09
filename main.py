@@ -28,7 +28,6 @@ def main():
     elif algorithm == SearchAlgorithms.A_STAR:
         moves = AStar(board)
 
-
     elif algorithm == SearchAlgorithms.IDS:
         Ids(board, 20)
 
