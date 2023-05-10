@@ -4,9 +4,27 @@ from Util.utils import MoveTypes
 from Algorithms.IDA import IDA
 from Algorithms.AStar import AStar
 from Algorithms.Ids import Ids
+from Algorithms.BFS import BFS
 
 # You can run specific algorithm tests using "-k test_#ALGORITHM_NAME#" (for example - "-k test_IDA")
 class Tests(unittest.TestCase):
+
+    # BFS Tests
+    def test_BFS_4d_easy(self):
+        board = Board(4, [1, 2, 3, 4, 5, 6, 7, 8,
+                      9, 10, 11, 12, 13, 0, 14, 15])
+        self.assertListEqual(
+            BFS(board), [MoveTypes.LEFT, MoveTypes.LEFT], 'The solution is wrong!')
+
+    def test_BFS_3d_medium(self):
+        board = Board(3, [1, 2, 3, 7, 0, 5, 8, 4, 6])
+        self.assertListEqual(
+            BFS(board), [MoveTypes.UP, MoveTypes.RIGHT, MoveTypes.DOWN, MoveTypes.LEFT, MoveTypes.LEFT, MoveTypes.UP], 'The solution is wrong!')
+
+    def test_BFS_3d_hard(self):
+        board = Board(3, [2, 1, 3, 5, 4, 0, 7, 8, 6])
+        self.assertListEqual(
+            BFS(board), [MoveTypes.DOWN, MoveTypes.RIGHT, MoveTypes.UP, MoveTypes.RIGHT, MoveTypes.DOWN, MoveTypes.LEFT, MoveTypes.LEFT, MoveTypes.UP, MoveTypes.RIGHT, MoveTypes.RIGHT, MoveTypes.DOWN, MoveTypes.LEFT, MoveTypes.UP, MoveTypes.LEFT, MoveTypes.UP], 'The solution is wrong!')
 
     # IDA Tests
     def test_IDA_4d_easy(self):

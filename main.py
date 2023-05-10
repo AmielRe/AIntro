@@ -3,6 +3,7 @@ from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
 from Algorithms.AStar import AStar
 from Algorithms.Ids import Ids
 from Algorithms.IDA import IDA
+from Algorithms.BFS import BFS
 
 
 def main():
@@ -19,8 +20,7 @@ def main():
 
     # If we got here, input is good and initial state is in 'graph'
     if algorithm == SearchAlgorithms.BFS:
-        pass
-        # RUN BFS
+        moves = BFS(board)
 
     elif algorithm == SearchAlgorithms.DFS:
         print("DFS algorithm isn't supported currently, please try a different algorithm!")
