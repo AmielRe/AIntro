@@ -1,8 +1,6 @@
-from enum import Enum
 from heapq import heappush, heappop
 from Components.Board import Board
 from Util.utils import MoveTypes, MovePriority, manhattan_distance
-
 
 class HeapItem:
     def __init__(self,
@@ -45,24 +43,23 @@ class HeapItem:
         return self.priority < other.priority
 
 
-def AStar(board_start: Board, layer = None):
+def AStar(board_start: Board, threshold = None):
     goal: list[int] = board_start.get_goal_state()
     heap = [HeapItem(0, board_start, [])]
     visited = set()
+    nextThreshold = threshold # Only relevant for IDA
     while heap:
         current_item: HeapItem = heappop(heap)
         cost: int = len(current_item.moves)
         current_board: Board = current_item.board
         priority: int = current_item.priority
         moves: list[MoveTypes] = current_item.moves
-        if(layer != None and layer < len(moves)):
-            return None
         if current_board.get_board_state() == goal:
             return moves
 
         visited.add(tuple(current_board.get_board_state()))
         for new_board, move in current_board.get_new_boards():
-            # Calculate the priory according to Manhattan_distance
+            # Calculate the priority according to Manhattan_distance
             priority = cost + 1
             for i, item in enumerate(new_board.get_board_state()):
                 if item:
@@ -76,6 +73,12 @@ def AStar(board_start: Board, layer = None):
                     priority += manhattan_distance(p1=(current_row, current_col),
                                                    p2=(goal_row, goal_col))
 
+            # Relevant only for IDA! in A* - this is ignored
+            if threshold is not None and priority > threshold[0]:
+                if priority < nextThreshold[0]:
+                    nextThreshold[0] = threshold[0]
+                continue
+                
             # Search the new board in the open list and
             # if it in the open list check the priority to remove from the heap and update the priory
             should_add = True
@@ -90,3 +93,5 @@ def AStar(board_start: Board, layer = None):
             # and the new board is not in the close list
             if should_add and tuple(new_board.get_board_state()) not in visited:
                 heappush(heap, HeapItem(priority, new_board, moves + [move]))
+
+    return None
