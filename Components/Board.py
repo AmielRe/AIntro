@@ -1,4 +1,5 @@
 import itertools
+from Util.utils import MoveTypes
 
 
 class Board:
@@ -28,9 +29,34 @@ class Board:
         sorted_list = sorted(self.get_board_state())
         first_item = sorted_list.pop(0)
         sorted_list.append(first_item)
-
         return sorted_list
 
+    def get_new_boards(self):
+        possible_moves = []
+        empty_row, empty_col = self.find_zero_index()
+
+        if self.can_move_up(empty_row + 1, empty_col):  # move empty item up
+            new_board = Board(self.length(), self.get_board_state())
+            new_board.move_up(empty_row + 1, empty_col)
+            possible_moves.append((new_board, MoveTypes.UP))
+
+        if self.can_move_down(empty_row - 1, empty_col):  # move empty item down
+            new_board = Board(self.length(), self.get_board_state())
+            new_board.move_down(empty_row - 1, empty_col)
+            possible_moves.append((new_board, MoveTypes.DOWN))
+
+        if self.can_move_left(empty_row, empty_col + 1):  # move empty item left
+            new_board = Board(self.length(), self.get_board_state())
+            new_board.move_left(empty_row, empty_col + 1)
+            possible_moves.append((new_board, MoveTypes.LEFT))
+
+        if self.can_move_right(empty_row, empty_col - 1):  # move empty item right
+            new_board = Board(self.length(), self.get_board_state())
+            new_board.move_right(empty_row, empty_col - 1)
+            possible_moves.append((new_board, MoveTypes.RIGHT))
+
+        return possible_moves
+    
     def length(self):
         return self._length
 

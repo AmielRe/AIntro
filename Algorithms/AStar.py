@@ -1,15 +1,6 @@
-from enum import Enum
 from heapq import heappush, heappop
 from Components.Board import Board
-from Util.utils import MoveTypes, manhattan_distance
-
-
-class MovePriority(Enum):
-    UP = 1
-    DOWN = 2
-    LEFT = 3
-    RIGHT = 4
-
+from Util.utils import MoveTypes, MovePriority, manhattan_distance
 
 class HeapItem:
     def __init__(self,
@@ -52,37 +43,11 @@ class HeapItem:
         return self.priority < other.priority
 
 
-def get_new_boards(board: Board):
-    possible_moves = []
-    empty_row, empty_col = board.find_zero_index()
-
-    if board.can_move_up(empty_row + 1, empty_col):  # move empty item up
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_up(empty_row + 1, empty_col)
-        possible_moves.append((new_board, MoveTypes.UP))
-
-    if board.can_move_down(empty_row - 1, empty_col):  # move empty item down
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_down(empty_row - 1, empty_col)
-        possible_moves.append((new_board, MoveTypes.DOWN))
-
-    if board.can_move_left(empty_row, empty_col + 1):  # move empty item left
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_left(empty_row, empty_col + 1)
-        possible_moves.append((new_board, MoveTypes.LEFT))
-
-    if board.can_move_right(empty_row, empty_col - 1):  # move empty item right
-        new_board = Board(board.length(), board.get_board_state())
-        new_board.move_right(empty_row, empty_col - 1)
-        possible_moves.append((new_board, MoveTypes.RIGHT))
-
-    return possible_moves
-
-
-def AStar(board_start: Board):
+def AStar(board_start: Board, threshold = None):
     goal: list[int] = board_start.get_goal_state()
     heap = [HeapItem(0, board_start, [])]
     visited = set()
+    nextThreshold = threshold # Only relevant for IDA
     while heap:
         current_item: HeapItem = heappop(heap)
         cost: int = len(current_item.moves)
@@ -93,8 +58,8 @@ def AStar(board_start: Board):
             return moves
 
         visited.add(tuple(current_board.get_board_state()))
-        for new_board, move in get_new_boards(current_board):
-            # Calculate the priory according to Manhattan_distance
+        for new_board, move in current_board.get_new_boards():
+            # Calculate the priority according to Manhattan_distance
             priority = cost + 1
             for i, item in enumerate(new_board.get_board_state()):
                 if item:
@@ -108,6 +73,12 @@ def AStar(board_start: Board):
                     priority += manhattan_distance(p1=(current_row, current_col),
                                                    p2=(goal_row, goal_col))
 
+            # Relevant only for IDA! in A* - this is ignored
+            if threshold is not None and priority > threshold[0]:
+                if priority < nextThreshold[0]:
+                    nextThreshold[0] = threshold[0]
+                continue
+                
             # Search the new board in the open list and
             # if it in the open list check the priority to remove from the heap and update the priory
             should_add = True
@@ -122,3 +93,5 @@ def AStar(board_start: Board):
             # and the new board is not in the close list
             if should_add and tuple(new_board.get_board_state()) not in visited:
                 heappush(heap, HeapItem(priority, new_board, moves + [move]))
+
+    return None

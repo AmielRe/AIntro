@@ -8,6 +8,12 @@ class SearchAlgorithms(Enum):
     IDA_STAR = 4
     DFS = 5
 
+class MovePriority(Enum):
+    UP = 1
+    DOWN = 2
+    LEFT = 3
+    RIGHT = 4
+
 
 class MoveTypes(Enum):
     RIGHT = 'R'
