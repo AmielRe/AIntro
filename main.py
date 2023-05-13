@@ -34,6 +34,8 @@ def main():
     elif algorithm == SearchAlgorithms.IDA_STAR:
         moves = IDA(board)
 
+    print(algorithm)
+    print([move.value for move in moves])
     File.write_output(moves=moves)
 
 
