@@ -16,20 +16,20 @@ def BFS(board: Board):
         
         current_board, current_path = queue.popleft()
 
-        if tuple(current_board.get_board_state()) not in visited:
-            # Add current state to close list
-            visited.add(tuple(current_board.get_board_state()))
+        # Add current state to close list
+        visited.add(tuple(current_board.get_board_state()))
 
-            # If current state is the goal, return the path
-            if current_board.get_board_state() == goal:
-                return current_path
+        # If current state is the goal, return the path
+        if current_board.get_board_state() == goal:
+            return current_path
 
-            # Get all new possible moves from the current state
-            for new_board, move in current_board.get_new_boards():
-                # add the move to the path
-                new_path = list(current_path)
-                new_path.append(move)
-                # Add the new state to the queue
+        # Get all new possible moves from the current state
+        for new_board, move in current_board.get_new_boards():
+            # add the move to the path
+            new_path = list(current_path)
+            new_path.append(move)
+            # Add the new state to the queue
+            if tuple(new_board.get_board_state()) not in visited:
                 queue.append((new_board, new_path))
     
     # No solution found
