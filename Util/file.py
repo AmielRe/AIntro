@@ -1,5 +1,5 @@
 import math
-from Util.utils import MoveTypes, SearchAlgorithms, getAlgorithmFromInt
+from Util.utils import MoveTypes, getAlgorithmFromInt
 
 
 class File:
