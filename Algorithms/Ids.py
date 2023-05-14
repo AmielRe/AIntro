@@ -1,25 +1,14 @@
-import string
 from Components.Board import Board
-from collections import deque
-from Util.utils import MoveTypes
 
 def Ids(board: Board):
     layer = 0
 
-    goal: list[int] = board.get_goal_state()
-
-    steps: list[MoveTypes]
-
     while True:
-
         steps = run_dfs_in_layer(board, layer)
 
         if steps is not None:
             break
         layer += 1
-
-    if not steps:
-        return []
 
     return list(steps)
 
