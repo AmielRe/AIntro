@@ -3,51 +3,56 @@ from Components.Board import Board
 from collections import deque
 from Util.utils import MoveTypes
 
-
-def Ids(board: Board, max_depth):
+def Ids(board: Board):
     layer = 0
 
     goal: list[int] = board.get_goal_state()
 
-    steps: list[string]
+    steps: list[MoveTypes]
 
     while True:
-        stack = deque()
-        stack.append(board)
-        visited = set()
-        steps = run_dfs_in_layer(stack, visited, goal, layer, [])
 
-        if steps is not None or layer > max_depth:
+        steps = run_dfs_in_layer(board, layer)
+
+        if steps is not None:
             break
         layer += 1
 
     if not steps:
         return []
 
-    return list(reversed(steps))
+    return list(steps)
 
-def run_dfs_in_layer(stack: deque, visited, goal: list[int], layer: int, array: list[MoveTypes]):
-    node = stack.pop()
+def run_dfs_in_layer(board, max_depth):
+    """
+    Iterative depth-limited search algorithm to solve the sliding puzzle board.
+    Returns the path of movements required to solve the board.
+    """
 
-    if node.__str__() not in visited and layer > -1:
-        if node.get_board_state() == goal:
-            return []
+    stack = [(board, [], 0)]
+    visited = set()
 
-        visited.add(node.__str__())
+    while stack:
+        board, path, depth = stack.pop()
 
-        # Get all available movements and reverse the order
-        new_boards = node.get_new_boards()[::-1]
+        if board.get_board_state() == board.get_goal_state():
+            return path
 
-        moves = []
+        if depth == max_depth:
+            continue
 
-        for new_board_inx in range(0, len(new_boards)):
-            stack.append(new_boards[new_board_inx][0])
-            steps_to_goal = run_dfs_in_layer(stack, visited, goal, layer - 1, array + [new_boards[new_board_inx][1]])
+        if board in visited:
+            continue
 
-            if steps_to_goal is not None:
-                moves = steps_to_goal
+        visited.add(board)
 
-                moves.append(new_boards[new_board_inx][1])
+        row, col = board.find_zero_index()
+        if row is None:
+            continue
 
-        if moves:
-            return moves
+        new_boards = list(reversed(board.get_new_boards()));
+
+        for new_board_idx in range(len(new_boards)):
+            stack.append((new_boards[new_board_idx][0], path + [new_boards[new_board_idx][1]], depth + 1))
+
+    return None
