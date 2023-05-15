@@ -29,7 +29,7 @@ def main():
         moves = AStar(board)
 
     elif algorithm == SearchAlgorithms.IDS:
-        Ids(board, 20)
+        moves = Ids(board)
 
     elif algorithm == SearchAlgorithms.IDA_STAR:
         moves = IDA(board)
