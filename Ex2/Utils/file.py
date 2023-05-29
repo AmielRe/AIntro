@@ -22,7 +22,7 @@ class File:
             for child in node.childs:
                 # Check if we got a result here (for the different format)
                 next_indent = indent + "|" if indent != "" else indent
-                if(child.next.childs is None):
+                if child.next.childs is None:
                     file_to_write_to.write(f"{next_indent}{node.value}={child.value}:{child.next.value}\n")
                 else:
                     file_to_write_to.write(f"{next_indent}{node.value}={child.value}\n")

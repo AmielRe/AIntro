@@ -129,4 +129,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-Files/output.txt
+Ex1/Files/output.txt
+Ex2/Files/output_tree.txt

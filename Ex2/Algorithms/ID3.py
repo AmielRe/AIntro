@@ -11,7 +11,6 @@ class DecisionTreeClassifier:
         self.label_categories = list(set(labels))
         self.label_counts = [list(labels).count(x) for x in self.label_categories]
         self.node = None
-        self.entropy = self._calculate_entropy([x for x in range(len(self.labels))])  # Calculates the initial entropy
 
     def _calculate_entropy(self, instance_ids):
         """Calculates the entropy for a given set of instances."""
@@ -22,7 +21,7 @@ class DecisionTreeClassifier:
 
     def _calculate_information_gain(self, instance_ids, feature_id):
         """Calculates the information gain for a given feature."""
-        info_gain = self._calculate_entropy(instance_ids)
+        entropy = self._calculate_entropy(instance_ids)
         feature_values = [self.data[x][feature_id] for x in instance_ids]
         unique_values = list(set(feature_values))
         feature_vals_count = [feature_values.count(x) for x in unique_values]
@@ -34,7 +33,7 @@ class DecisionTreeClassifier:
         ]
 
         # Compute the information gain with the chosen feature
-        info_gain = info_gain - sum([val_counts / len(instance_ids) * self._calculate_entropy(val_ids)
+        info_gain = entropy - sum([val_counts / len(instance_ids) * self._calculate_entropy(val_ids)
                                      for val_counts, val_ids in zip(feature_vals_count, feature_vals_id)])
 
         return info_gain
