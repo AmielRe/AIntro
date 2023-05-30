@@ -1,3 +1,4 @@
+from Ex2.Algorithms.NB import NaiveBase
 from Utils.file import File
 import pandas as pd
 from Algorithms.ID3 import DecisionTreeClassifier
@@ -22,6 +23,12 @@ def main():
     # Evaluate and print the accuracy of the ID3
     accuracy = tree_clf.evaluate(test_data, test_data.columns[-1])
     print("Test accuracy {:.4f}".format(accuracy))
+
+    naive_base = NaiveBase(data=data, feature_names=feature_names, labels=labels)
+
+    print(sum(naive_base.NB().values()))
+
+    print(naive_base.evaluate(test_data, test_data.columns[-1]))
 
 
 if __name__ == "__main__":
