@@ -1,4 +1,4 @@
-from Ex2.Algorithms.NB import NaiveBase
+from Ex2.Algorithms.NB import NaiveBayes
 from Utils.file import File
 import pandas as pd
 from Algorithms.ID3 import DecisionTreeClassifier
@@ -24,9 +24,9 @@ def main():
     accuracy = tree_clf.evaluate(test_data, test_data.columns[-1])
     print("Test accuracy {:.4f}".format(accuracy))
 
-    naive_base = NaiveBase(data=data, feature_names=feature_names, labels=labels)
+    naive_base = NaiveBayes(data=data, feature_names=feature_names, labels=labels)
 
-    print(sum(naive_base.NB().values()))
+    naive_base.nb()
 
     print(naive_base.evaluate(test_data, test_data.columns[-1]))
 

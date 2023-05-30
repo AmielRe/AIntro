@@ -3,6 +3,7 @@ import math
 
 
 def _calculate_features_categories_count(summed_feature_to_label_ratio):
+    """Takes the summed feature to label matching cases and sum the overall number of each feature case"""
     features_categories_count = {}
 
     for key, value in summed_feature_to_label_ratio.items():
@@ -15,15 +16,19 @@ def _calculate_features_categories_count(summed_feature_to_label_ratio):
     return features_categories_count
 
 
-class NaiveBase:
+class NaiveBayes:
     """Naive Bayes algorithm"""
 
     def __init__(self, data, feature_names, labels):
+        """
+        Initializing commonly used variables
+        """
+
         self.data = data
         self.feature_names = feature_names
         self.labels = labels
-        self.data_categories = [list(set(col)) for col in zip(*self.data)]
-        self.multiplications_variations = [list(var) for var in itertools.product(*self.data_categories)]
+        self.feature_variations = [list(set(col)) for col in zip(*self.data)]
+        self.multiplications_variations = [list(var) for var in itertools.product(*self.feature_variations)]
         self.label_categories = list(set(labels))
         self.label_counts = [list(labels).count(x) for x in self.label_categories]
         self.priors = [list(labels).count(x) / len(list(labels)) for x in self.label_categories]
@@ -44,10 +49,12 @@ class NaiveBase:
         return multiplications
 
     def _sum_feature_to_label_ratio(self):
+        """Summing the feature to label matching cases"""
         summed_feature_to_label_ratio = {}
 
-        for label_position, example_features in enumerate(self.data):
-            for feature_inx, feature in enumerate(example_features):
+        for label_position, data_row in enumerate(self.data):
+            for feature_inx, feature in enumerate(data_row):
+                # Using the feature name, feature value and the label value as the key
                 probability_key = "%s=%s|%s" % (self.feature_names[feature_inx], feature, self.labels[label_position])
 
                 if summed_feature_to_label_ratio.get(probability_key):
@@ -58,24 +65,28 @@ class NaiveBase:
         return summed_feature_to_label_ratio
 
     def _calculate_probabilities(self, summed_feature_to_label_ratio, features_categories_count):
+        """Divides each of the feature to label ratio with sum of the corresponding label"""
         probabilities = summed_feature_to_label_ratio.copy()
 
-        for feature_categories_idx, feature_categories in enumerate(self.data_categories):
+        for feature_categories_idx, feature_categories in enumerate(self.feature_variations):
             for feature_category in feature_categories:
                 for label_category_idx, label_category in enumerate(self.label_categories):
                     probability_key = "%s=%s|%s" % \
                                       (self.feature_names[feature_categories_idx], feature_category, label_category)
 
                     if probabilities.get(probability_key):
+                        # The sum of the corresponding label
                         probabilities[probability_key] /= self.label_counts[label_category_idx]
 
                     else:
-                        # smoothing
+                        # Smoothing
                         probabilities[probability_key] = 1 / features_categories_count
 
         return probabilities
 
     def _calculate_multiplications(self, probabilities):
+        """Multiply the all the relevant feature to label ratios with the priors to create the labels predictions
+        for each feature variation instance"""
         multiplications = {}
 
         for variation in self.multiplications_variations:
@@ -88,6 +99,7 @@ class NaiveBase:
 
                     product *= probabilities[probability_key]
 
+                # Create the multiplication key by the order of multiplication operations to create unique keys
                 multiplication_key = "*".join(variation) + "|" + label_category
 
                 multiplications[multiplication_key] = product
@@ -95,6 +107,7 @@ class NaiveBase:
         return multiplications
 
     def _predict(self, features):
+        """Generate multiplication key by the order of multiplication operations to find corresponding prediction"""
         string_features = "*".join(features)
 
         max_args = (None, 0)
