@@ -93,14 +93,14 @@ class DecisionTreeClassifier:
             node.childs.append(child)  # Append new child node to current node
             child_x_ids = [x for x in instance_ids if self.data[x][best_feature_id] == value]
             if not child_x_ids:
-                child.next = max(set(labels_in_features), key=labels_in_features.count)
+                child.nextFeature = max(set(labels_in_features), key=labels_in_features.count)
             else:
                 if feature_ids and best_feature_id in feature_ids:
                     to_remove = feature_ids.index(best_feature_id)
                     feature_ids.pop(to_remove)
                     
                 # Continue building the tree recursively
-                child.next = self._build_tree(child_x_ids, feature_ids, child.next)
+                child.nextFeature = self._build_tree(child_x_ids, feature_ids, child.nextFeature)
         return node
     
     def _predict(self, sample):
@@ -111,7 +111,7 @@ class DecisionTreeClassifier:
             sample_value = sample[feature_id]
             child = next((child for child in node.childs if child.value == sample_value), None)
             if child:
-                node = child.next
+                node = child.nextFeature
             else:
                 # If there is no matching child node, return the most probable label
                 label_counts = [self.labels.count(label) for label in self.label_categories]
