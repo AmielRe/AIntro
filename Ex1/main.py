@@ -1,5 +1,6 @@
 from Components.Board import Board
-from Util.file import File, MoveTypes, SearchAlgorithms, getAlgorithmFromInt
+from Util.file import File
+from Util.utils import MoveTypes, SearchAlgorithms, getAlgorithmFromInt
 from Algorithms.AStar import AStar
 from Algorithms.Ids import Ids
 from Algorithms.IDA import IDA
