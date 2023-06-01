@@ -1,5 +1,4 @@
 import itertools
-import math
 
 
 def _calculate_features_categories_count(summed_feature_to_label_ratio):

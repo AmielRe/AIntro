@@ -3,5 +3,5 @@ class Node:
 
     def __init__(self):
         self.value = None
-        self.next = None
+        self.nextFeature = None
         self.childs = None

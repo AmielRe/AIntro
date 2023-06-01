@@ -22,11 +22,11 @@ class File:
             for child in node.childs:
                 # Check if we got a result here (for the different format)
                 next_indent = indent + "|" if indent != "" else indent
-                if child.next.childs is None:
-                    file_to_write_to.write(f"{next_indent}{node.value}={child.value}:{child.next.value}\n")
+                if child.nextFeature.childs is None:
+                    file_to_write_to.write(f"{next_indent}{node.value}={child.value}:{child.nextFeature.value}\n")
                 else:
                     file_to_write_to.write(f"{next_indent}{node.value}={child.value}\n")
-                File.write_tree_output(file_to_write_to, child.next, indent + "\t")
+                File.write_tree_output(file_to_write_to, child.nextFeature, indent + "\t")
    
     @staticmethod
     def write_output(fileToWriteTo):
