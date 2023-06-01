@@ -6,7 +6,7 @@ def _calculate_features_categories_count(summed_feature_to_label_ratio):
     features_categories_count = {}
 
     for key, value in summed_feature_to_label_ratio.items():
-        feature_category = key.split('|')[0]
+        feature_category = key.split('^')[0]
         if feature_category in features_categories_count:
             features_categories_count[feature_category] += value
         else:
@@ -56,7 +56,7 @@ class NaiveBayes:
         for label_position, data_row in enumerate(self.data):
             for feature_inx, feature in enumerate(data_row):
                 # Using the feature name, feature value and the label value as the key
-                probability_key = "%s=%s|%s" % (self.feature_names[feature_inx], feature, self.labels[label_position])
+                probability_key = "(%s=%s)^%s" % (self.feature_names[feature_inx], feature, self.labels[label_position])
 
                 if summed_feature_to_label_ratio.get(probability_key):
                     summed_feature_to_label_ratio[probability_key] += 1
@@ -82,7 +82,7 @@ class NaiveBayes:
 
                     else:
                         # Smoothing
-                        probabilities[probability_key] = 1 / features_categories_count
+                        probabilities[probability_key] = 1 / features_categories_count[f"({probability_key.split('|')[0]})"]
 
         return probabilities
 
