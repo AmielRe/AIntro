@@ -27,7 +27,9 @@ class NaiveBayes:
         self.data = data
         self.feature_names = feature_names
         self.labels = labels
+        # Creates list of lists, each list represents all the uniques variations of a feature category
         self.feature_variations = [list(set(col)) for col in zip(*self.data)]
+        # Creates list of all the combinations of features values
         self.multiplications_variations = [list(var) for var in itertools.product(*self.feature_variations)]
         self.label_categories = list(set(labels))
         self.label_counts = [list(labels).count(x) for x in self.label_categories]
@@ -74,6 +76,7 @@ class NaiveBayes:
                     probability_key = "%s=%s|%s" % \
                                       (self.feature_names[feature_categories_idx], feature_category, label_category)
 
+                    # Check if the ratio is not zero for that label
                     if probabilities.get(probability_key):
                         # The sum of the corresponding label
                         probabilities[probability_key] /= self.label_counts[label_category_idx]
@@ -85,12 +88,13 @@ class NaiveBayes:
         return probabilities
 
     def _calculate_multiplications(self, probabilities):
-        """Multiply the all the relevant feature to label ratios with the priors to create the labels predictions
+        """Multiply all the relevant feature to label ratios with the priors to create the labels predictions
         for each feature variation instance"""
         multiplications = {}
 
         for variation in self.multiplications_variations:
             for label_variation_idx, label_category in enumerate(self.label_categories):
+                # The prior of the current label
                 product = self.priors[label_variation_idx]
 
                 for feature_category_idx, feature_category in enumerate(variation):
@@ -100,7 +104,7 @@ class NaiveBayes:
                     product *= probabilities[probability_key]
 
                 # Create the multiplication key by the order of multiplication operations to create unique keys
-                multiplication_key = "*".join(variation) + "|" + label_category
+                multiplication_key = label_category + "|" + "*".join(variation)
 
                 multiplications[multiplication_key] = product
 
@@ -113,7 +117,7 @@ class NaiveBayes:
         max_args = (None, 0)
 
         for label_category in self.label_categories:
-            multiplication_key = string_features + "|" + label_category
+            multiplication_key = label_category + "|" + string_features
 
             if max_args[1] < self.multiplications[multiplication_key]:
                 max_args = (label_category, self.multiplications[multiplication_key])
@@ -123,11 +127,17 @@ class NaiveBayes:
     def evaluate(self, test_data_m, labels):
         correct_predict = 0
         wrong_predict = 0
-        for index, row in test_data_m.iterrows(): # For each row in the dataset
+
+        # For each row in the dataset
+        for index, row in test_data_m.iterrows():
             result = self._predict(row.tolist()[:-1])
-            if result == test_data_m[labels].iloc[index]: # Predicted value and expected value is same or not
+
+            # Predicted value and expected value is same or not
+            if result == test_data_m[labels].iloc[index]:
                 correct_predict += 1
             else:
                 wrong_predict += 1
-        accuracy = correct_predict / (correct_predict + wrong_predict) # Calculate accuracy ( (TP + TN) / All Samples )
+
+        # Calculate accuracy ( (TP + TN) / All Samples )
+        accuracy = correct_predict / (correct_predict + wrong_predict)
         return accuracy
