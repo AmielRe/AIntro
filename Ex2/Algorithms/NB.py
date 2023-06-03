@@ -1,11 +1,11 @@
 import itertools
 
 
-def _calculate_features_categories_count(summed_feature_to_label_ratio):
+def _calculate_features_categories_count(feature_to_label_intersection):
     """Takes the summed feature to label matching cases and sum the overall number of each feature case"""
     features_categories_count = {}
 
-    for key, value in summed_feature_to_label_ratio.items():
+    for key, value in feature_to_label_intersection.items():
         feature_category = key.split('^')[0]
         if feature_category in features_categories_count:
             features_categories_count[feature_category] += value
@@ -38,36 +38,38 @@ class NaiveBayes:
         self.multiplications = {}
 
     def nb(self):
-        summed_feature_to_label_ratio = self._sum_feature_to_label_ratio()
+        feature_to_label_intersection = self._feature_to_label_intersection()
 
-        features_categories_count = _calculate_features_categories_count(summed_feature_to_label_ratio)
+        features_categories_count = _calculate_features_categories_count(feature_to_label_intersection)
 
-        probabilities = self._calculate_probabilities(summed_feature_to_label_ratio, features_categories_count)
+        probabilities = self._calculate_probabilities(feature_to_label_intersection, features_categories_count)
 
         multiplications = self._calculate_multiplications(probabilities)
 
         self.multiplications = multiplications
         return multiplications
 
-    def _sum_feature_to_label_ratio(self):
+    def _feature_to_label_intersection(self):
         """Summing the feature to label matching cases"""
-        summed_feature_to_label_ratio = {}
+        feature_to_label_intersection = {}
 
         for label_position, data_row in enumerate(self.data):
             for feature_inx, feature in enumerate(data_row):
                 # Using the feature name, feature value and the label value as the key
-                probability_key = "(%s=%s)^%s" % (self.feature_names[feature_inx], feature, self.labels[label_position])
+                intersection_key = "(%s=%s)^%s" % \
+                                   (self.feature_names[feature_inx], feature, self.labels[label_position])
 
-                if summed_feature_to_label_ratio.get(probability_key):
-                    summed_feature_to_label_ratio[probability_key] += 1
+                if feature_to_label_intersection.get(intersection_key):
+                    feature_to_label_intersection[intersection_key] += 1
                 else:
-                    summed_feature_to_label_ratio[probability_key] = 1
+                    feature_to_label_intersection[intersection_key] = 1
 
-        return summed_feature_to_label_ratio
+        return feature_to_label_intersection
 
-    def _calculate_probabilities(self, summed_feature_to_label_ratio, features_categories_count):
-        """Divides each of the feature to label ratio with sum of the corresponding label"""
-        probabilities = summed_feature_to_label_ratio.copy()
+    def _calculate_probabilities(self, feature_to_label_intersection, features_categories_count):
+        """Divides each of the feature to label intersection with sum of the corresponding label to
+        create conditional probabilities"""
+        probabilities = feature_to_label_intersection.copy()
 
         for feature_categories_idx, feature_categories in enumerate(self.feature_variations):
             for feature_category in feature_categories:
@@ -75,19 +77,25 @@ class NaiveBayes:
                     probability_key = "%s=%s|%s" % \
                                       (self.feature_names[feature_categories_idx], feature_category, label_category)
 
-                    # Check if the ratio is not zero for that label
-                    if probabilities.get(probability_key):
-                        # The sum of the corresponding label
-                        probabilities[probability_key] /= self.label_counts[label_category_idx]
+                    intersection_key = "(%s=%s)^%s" % \
+                                       (self.feature_names[feature_categories_idx], feature_category, label_category)
+
+                    # Check if the there is intersection between the feature and the label
+                    if feature_to_label_intersection[intersection_key]:
+                        # Divide the intersection of the feature with the label with the count of the label in order
+                        # calculate the conditional probability
+                        probabilities[probability_key] = feature_to_label_intersection[intersection_key] / \
+                                                         self.label_counts[label_category_idx]
 
                     else:
                         # Smoothing
-                        probabilities[probability_key] = 1 / features_categories_count[f"({probability_key.split('|')[0]})"]
+                        probabilities[probability_key] = 1 / \
+                                                         features_categories_count[f"({probability_key.split('|')[0]})"]
 
         return probabilities
 
     def _calculate_multiplications(self, probabilities):
-        """Multiply all the relevant feature to label ratios with the priors to create the labels predictions
+        """Multiply all the relevant conditional probabilities with the priors to create the labels predictions
         for each feature variation instance"""
         multiplications = {}
 
