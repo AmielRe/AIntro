@@ -72,14 +72,14 @@ class DecisionTreeClassifier:
             node = Node()
         labels_in_features = [self.labels[x] for x in instance_ids]
     
-        # If all the data have the same class - return the node
-        if len(set(labels_in_features)) == 1:
-            node.value = self.labels[instance_ids[0]]
-            return node
-        
         # If there are no more features to compute, return the node with the most probable class
         if len(feature_ids) == 0:
             node.value = max(set(labels_in_features), key=labels_in_features.count)
+            return node
+        
+        # If all the data have the same class - return the node
+        if len(set(labels_in_features)) == 1:
+            node.value = self.labels[instance_ids[0]]
             return node
         
         # Get the feature that maximizes the information gain
@@ -95,16 +95,18 @@ class DecisionTreeClassifier:
             if not child_x_ids:
                 child.nextFeature = max(set(labels_in_features), key=labels_in_features.count)
             else:
+                next_feature_ids = feature_ids[:]
                 if feature_ids and best_feature_id in feature_ids:
                     to_remove = feature_ids.index(best_feature_id)
-                    feature_ids.pop(to_remove)
+                    next_feature_ids.pop(to_remove)
+                    #feature_ids.pop(to_remove)
                     
                 # Continue building the tree recursively
-                child.nextFeature = self._build_tree(child_x_ids, feature_ids, child.nextFeature)
+                child.nextFeature = self._build_tree(child_x_ids, next_feature_ids, child.nextFeature)
         
         # Check if all leaf nodes under the current parent have the same label
         all_leaf_labels = [child.nextFeature.value for child in node.childs]
-        if len(set(all_leaf_labels)) == 1:
+        if len(set(all_leaf_labels)) == 1 and all(label in self.label_categories for label in all_leaf_labels):
             node.value = all_leaf_labels[0]
             node.childs = None
         
