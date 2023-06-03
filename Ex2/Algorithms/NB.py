@@ -89,8 +89,9 @@ class NaiveBayes:
 
                     else:
                         # Smoothing
-                        probabilities[probability_key] = 1 / \
-                                                         features_categories_count[f"({probability_key.split('|')[0]})"]
+                        probabilities[probability_key] = \
+                            1 / (features_categories_count[f"({probability_key.split('|')[0]})"] +
+                                 self.label_counts[label_category_idx])
 
         return probabilities
 
