@@ -1,12 +1,12 @@
 import math
 from Components.Node import Node
 
-class DecisionTreeClassifier:
+class ID3:
     """Decision Tree Classifier using ID3 algorithm."""
-
+    
     def __init__(self, data, feature_names, labels):
         """
-        Initializes the DecisionTreeClassifier with the given data, feature names, and labels.
+        Initializes the ID3 with the given data, feature names, and labels.
         """
         self.data = data
         self.feature_names = feature_names

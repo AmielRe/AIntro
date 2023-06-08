@@ -1,6 +1,7 @@
 import pandas as pd
-import numpy as np
+from Algorithms.ID3 import ID3
 from Components.Node import Node
+from Algorithms.NB import NaiveBayes
 
 class File:
     @staticmethod
@@ -29,6 +30,27 @@ class File:
                 File.write_tree_output(file_to_write_to, child.nextFeature, indent + "\t")
    
     @staticmethod
-    def write_output(fileToWriteTo):
-        # Naive Bayes output function
-        pass
+    def write_output(file_to_write_to, id3: ID3, naive_bayes: NaiveBayes, test_data, label):
+        id3_correct_predict = 0
+        nb_correct_predict = 0
+        id3_wrong_predict = 0
+        nb_wrong_predict = 0
+        for index, row in test_data.iterrows(): # For each row in the dataset
+            id3_result = id3._predict(row.tolist()[:-1])
+            nb_result = naive_bayes._predict(row.tolist()[:-1])
+            file_to_write_to.write(f"{id3_result}\t{nb_result}\n")
+
+            if id3_result == test_data[label].iloc[index]: # Predicted value and expected value is same or not
+                id3_correct_predict += 1
+            else:
+                id3_wrong_predict += 1
+
+            if nb_result == test_data[label].iloc[index]: # Predicted value and expected value is same or not
+                nb_correct_predict += 1
+            else:
+                nb_wrong_predict += 1
+
+        # Calculate accuracy ( (TP + TN) / All Samples )
+        id3_accuracy = id3_correct_predict / (id3_correct_predict + id3_wrong_predict)
+        nb_accuracy = nb_correct_predict / (nb_correct_predict + nb_wrong_predict)
+        file_to_write_to.write("{:.3f}\t{:.3f}".format(id3_accuracy, nb_accuracy))
