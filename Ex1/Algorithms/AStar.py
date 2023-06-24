@@ -47,7 +47,7 @@ def AStar(board_start: Board, threshold = None):
     goal: list[int] = board_start.get_goal_state()
     heap = [HeapItem(0, board_start, [])]
     visited = set()
-    nextThreshold = threshold # Only relevant for IDA
+    nextThreshold = threshold.copy() # Only relevant for IDA
     while heap:
         current_item: HeapItem = heappop(heap)
         cost: int = len(current_item.moves)
@@ -75,8 +75,8 @@ def AStar(board_start: Board, threshold = None):
 
             # Relevant only for IDA! in A* - this is ignored
             if threshold is not None and priority > threshold[0]:
-                if priority < nextThreshold[0]:
-                    nextThreshold[0] = threshold[0]
+                if priority < nextThreshold[0] or threshold[0] == nextThreshold[0]:
+                    nextThreshold[0] = priority
                 continue
                 
             # Search the new board in the open list and
@@ -94,4 +94,5 @@ def AStar(board_start: Board, threshold = None):
             if should_add and tuple(new_board.get_board_state()) not in visited:
                 heappush(heap, HeapItem(priority, new_board, moves + [move]))
 
+    threshold[0] = nextThreshold[0]
     return None

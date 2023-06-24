@@ -7,7 +7,7 @@ def IDA(board: Board):
     IDA (Iterative Deep A* Algorithm) search algorithm to solve the sliding puzzle board.
     Returns the path of movements required to solve the board.
     """
-    threshold = [sys.maxsize]
+    threshold = [0]
 
     while True:
         # Call AStar with threshold (passed as array of 1 int because we want to change it inside the function for the next iteration)
