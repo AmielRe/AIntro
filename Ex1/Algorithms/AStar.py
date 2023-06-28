@@ -47,7 +47,7 @@ def AStar(board_start: Board, threshold = None):
     goal: list[int] = board_start.get_goal_state()
     heap = [HeapItem(0, board_start, [])]
     visited = set()
-    nextThreshold = threshold.copy() # Only relevant for IDA
+    nextThreshold = None if threshold is None else threshold.copy() # Only relevant for IDA
     while heap:
         current_item: HeapItem = heappop(heap)
         cost: int = len(current_item.moves)
